@@ -22,6 +22,7 @@ int main(void) {
     int CPosX = 0;
     int dice;
     int friendshipPoint = 2;
+    int prevX = 0;
     int soupCount = 0;
     printf("야옹이의 이름을 지어 주세요: ");
     scanf("%s", &name);
@@ -44,6 +45,7 @@ int main(void) {
 
         printf("===========================================\n\n");
         Sleep(500);
+
         printf("%s 이동: 집사와 친밀할수록 냄비 쪽으로 갈 확률이 높아집니다.\n", name);
         printf("주사위 눈이 %d 이상이면 냄비 쪽으로 이동합니다.\n", 6 - friendshipPoint);
         printf("주사위를 굴립니다. 또르륵...\n");
@@ -63,6 +65,8 @@ int main(void) {
                 CPosX--;
             }
         }
+        Sleep(500);
+
         if (CPosX == 0) {
             printf("%s은(는) 자신의 집에서 편안함을 느낍니다.\n\n", name);
         }
@@ -83,6 +87,8 @@ int main(void) {
                 printf("현재까지 만든 수프: %d개\n", soupCount);
             }
         }
+        Sleep(500);
+
         // Render Room
         for (int i = 0; i < ROOM_WIDTH; i++) {
             printf("#");
@@ -103,13 +109,11 @@ int main(void) {
 
         printf("\n#");
         for (int i = 0; i < BWL_PO; i++) {
-            if (i < CPosX) {
-                printf(".");
-            }
-            else if (i == CPosX) {
+            if (i == CPosX) {
                 printf("C");
-            }
-            else {
+            } else if (i == prevX) {
+                printf(".");
+            } else {
                 printf(" ");
             }
         } // 2 Cat
@@ -122,6 +126,9 @@ int main(void) {
         // End Render Room
 
         int select;
+
+        Sleep(500);
+
         printf("어떤 상호작용을 하시겠습니까?\t0. 아무것도 하지 않음.\t1. 긁어 주기\n");
         while (1) {
             printf(">> ");
@@ -133,7 +140,6 @@ int main(void) {
         switch (select) {
         case 0:
             printf("아무것도 하지 않습니다.\n4/6의 확률로 친밀도가 떨어집니다.\n");
-            Sleep(500);
             dice = rand() % 5 + 1;
             printf("%d이(가) 나왔습니다!\n", dice);
 
@@ -151,7 +157,6 @@ int main(void) {
             printf("%s의 턱을 긁어주었습니다.\n", name);
             printf("2/6의 확률로 친밀도가 높아집니다.\n");
             printf("주사위를 굴립니다. 또르륵...\n");
-            Sleep(500);
 
             dice = rand() % 5 + 1;
             printf("%d이(가) 나왔습니다!\n", dice);
@@ -166,6 +171,7 @@ int main(void) {
             break;
 
         }
+        prevX = CPosX;
         Sleep(2500);
         system("cls");
     }
