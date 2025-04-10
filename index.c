@@ -31,7 +31,7 @@ int main(void) {
     while (1) {
 
         printf("================ 현재 상태 ================\n");
-        printf("현재까지 만든 수프: %d\n", soupCount);
+        printf("현재까지 만든 수프: %d개\n", soupCount);
         printf("집사와의 관계(0~4): %d\n", friendshipPoint);
 
         switch (friendshipPoint) {
