@@ -5,7 +5,7 @@
 #include <Windows.h>
 #include <time.h>
 
-#define ROOM_WIDTH 15
+#define ROOM_WIDTH 20
 #define HOME_POS 1
 #define BOWL_POS (ROOM_WIDTH - 2)
 #define MAX_NAME_LENGTH 100
@@ -171,7 +171,7 @@ static void moveCatByMood() {
     catPrevX = catPosX;
 
     switch (catMood) {
-    case 0: // 집 쪽으로 이동
+    case 0:
         if (catPosX > HOME_POS) {
             catPosX--;
             printf("기분이 매우 나쁜 %s은(는) 집으로 향합니다.\n\n", catName);
@@ -181,7 +181,7 @@ static void moveCatByMood() {
         }
         break;
 
-    case 1: // 더 가까운 놀이기구 쪽으로 이동
+    case 1:
     {
         int closestToy = -1;
         int minDistance = ROOM_WIDTH;
@@ -223,11 +223,11 @@ static void moveCatByMood() {
     }
     break;
 
-    case 2: // 제자리에 대기
+    case 2:
         printf("%s은(는) 기분좋게 식빵을 굽고 있습니다.\n\n", catName);
         break;
 
-    case 3: // 냄비 쪽으로 이동
+    case 3:
         if (catPosX < BOWL_POS) {
             catPosX++;
             printf("%s은(는) 골골송을 부르며 수프를 만들러 갑니다.\n\n", catName);
@@ -238,7 +238,6 @@ static void moveCatByMood() {
         break;
     }
 
-    // 경계 체크
     if (catPosX < 1) catPosX = 1;
     if (catPosX >= BOWL_POS) catPosX = BOWL_POS;
 }
@@ -285,7 +284,6 @@ static void handleInteraction() {
 
     int maxOption = 1;
 
-    // 장난감에 따른 옵션 추가 (순서대로 번호 부여)
     if (toyMouse) {
         printf("  %d. 장난감 쥐로 놀아 주기\n", ++maxOption);
     }
@@ -334,7 +332,6 @@ static void handleInteraction() {
 
     case 2:
         if (toyMouse && !toyLaser) {
-            // 장난감 쥐만 있는 경우
             printf("장난감 쥐로 %s와 놀아 주었습니다.\n", catName);
             printf("%s의 기분이 조금 좋아졌습니다: %d->%d\n", catName, catMood, (catMood + 1 > MAX_MOOD ? MAX_MOOD : catMood + 1));
             catMood++;
@@ -350,7 +347,6 @@ static void handleInteraction() {
             }
         }
         else if (toyLaser && !toyMouse) {
-            // 레이저 포인터만 있는 경우
             printf("레이저 포인터로 %s와 신나게 놀아 주었습니다.\n", catName);
             printf("%s의 기분이 꽤 좋아졌습니다: %d->%d\n", catName, catMood, (catMood + 2 > MAX_MOOD ? MAX_MOOD : catMood + 2));
             catMood += 2;
@@ -366,7 +362,6 @@ static void handleInteraction() {
             }
         }
         else if (toyMouse && toyLaser) {
-            // 둘 다 있는 경우 - 2번은 장난감 쥐
             printf("장난감 쥐로 %s와 놀아 주었습니다.\n", catName);
             printf("%s의 기분이 조금 좋아졌습니다: %d->%d\n", catName, catMood, (catMood + 1 > MAX_MOOD ? MAX_MOOD : catMood + 1));
             catMood++;
@@ -385,7 +380,6 @@ static void handleInteraction() {
 
     case 3:
         if (toyMouse && toyLaser) {
-            // 둘 다 있는 경우 - 3번은 레이저 포인터
             printf("레이저 포인터로 %s와 신나게 놀아 주었습니다.\n", catName);
             printf("%s의 기분이 꽤 좋아졌습니다: %d->%d\n", catName, catMood, (catMood + 2 > MAX_MOOD ? MAX_MOOD : catMood + 2));
             catMood += 2;
@@ -417,33 +411,36 @@ static void handleShop() {
     printf("상점에서 물건을 살 수 있습니다.\n");
     printf("어떤 물건을 구매할까요?\n");
     printf("  0. 아무 것도 사지 않는다.\n");
+    printf("  1. 장난감 쥐: 1 CP ");
+	if (toyMouse) {
+		printf("(품절)\n");
+	}
+	else {
+		printf("\n");
+	}
 
-    if (toyMouse) {
-        printf("  1. 장난감 쥐: 1 CP (품절)\n");
-    }
-    else {
-        printf("  1. 장난감 쥐: 1 CP\n");
-    }
-
+    printf("  2. 레이저 포인터: 2 CP ");
     if (toyLaser) {
-        printf("  2. 레이저 포인터: 2 CP (품절)\n");
+        printf("(품절)\n");
     }
     else {
-        printf("  2. 레이저 포인터: 2 CP\n");
+		printf("\n");
     }
 
+    printf("  3. 스크래처: 4 CP ");
     if (toyScratchingPost) {
-        printf("  3. 스크래처: 4 CP (품절)\n");
+		printf(" (품절)\n");
     }
     else {
-        printf("  3. 스크래처: 4 CP\n");
+        printf("\n");
     }
 
+    printf("  4. 캣타워: 6 CP ");
     if (toyCatTower) {
-        printf("  4. 캣타워: 6 CP (품절)\n");
+		printf("(품절)\n");
     }
     else {
-        printf("  4. 캣타워: 6 CP\n");
+        printf("\n");
     }
 
     int choice = getValidInput(0, 4);
@@ -520,7 +517,7 @@ static void handleShop() {
 static int handleRandomQuest() {
     if (turn % 3 == 0) {
         printf("돌발 퀘스트가 발생했습니다!\n");
-        printf("도전? (1: 예, 0: 아니오)");
+        printf("도전? (1: 예, 0: 아니오)\n");
 
         int challenge = getValidInput(0, 1);
 
