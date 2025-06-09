@@ -22,9 +22,11 @@ int main(void)
     char name[10];
     int CPosX = 0;
     int dice;
+    int cp = 0;
     int friendshipPoint = 2;
     int prevX = 0;
     int soupCount = 0;
+    int feel = 3;
     printf("야옹이의 이름을 지어 주세요: ");
     scanf("%s", &name);
     printf("야옹이의 이름은 %s 입니다.\n", name);
@@ -35,7 +37,19 @@ int main(void)
 
         printf("================ 현재 상태 ================\n");
         printf("현재까지 만든 수프: %d개\n", soupCount);
-        printf("집사와의 관계(0~4): %d\n", friendshipPoint);
+        printf("%s의 기분(0~3) : %d\n  ", name, feel);
+        switch (feel)
+        {
+        case 0:
+            printf("기분이 매우 나쁩니다.\n");
+        case 1:
+            printf("심심해합니다.\n");
+        case 2:
+            printf("식빵을 굽습니다.\n");
+        case 3:
+            printf("골골송을 부릅니다.\n");
+        }
+        printf("집사와의 관계(0~4): %d\n  ", friendshipPoint);
 
         switch (friendshipPoint)
         {
